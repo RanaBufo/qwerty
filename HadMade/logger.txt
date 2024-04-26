@@ -1,0 +1,27 @@
+Now listening on: https://localhost:7228
+Now listening on: http://localhost:5207
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Development
+Content root path: D:\Project\HadMade
+Path: /  Time:20:29:32
+Now listening on: https://localhost:7228
+Now listening on: http://localhost:5207
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Development
+Content root path: D:\Project\HadMade
+Path: /  Time:20:37:55
+Now listening on: https://localhost:7228
+Now listening on: http://localhost:5207
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Development
+Content root path: D:\Project\HadMade
+Path: /  Time:22:50:54
+Path: /favicon.ico  Time:22:50:54
+Path: /favicon.ico  Time:22:50:54
+Now listening on: https://localhost:7228
+Now listening on: http://localhost:5207
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Development
+Content root path: D:\Project\HadMade
+Path: /  Time:23:13:46
+Path: /qwerrt  Time:23:16:54

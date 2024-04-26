@@ -1,0 +1,90 @@
+builder.Logging.AddCustomFileLogger(Path.Combine(Directory.GetCurrentDirectory(), "logger.txt"));
+
+
+
+
+// Класс для логирования в файл
+public class CustomFileLogger : ILogger, IDisposable
+{
+    private readonly string _filePath; // Путь к файлу логов
+    private static readonly object _lock = new object(); // Объект блокировки для многопоточной безопасности
+
+    // Конструктор, принимающий путь к файлу логов
+    public CustomFileLogger(string path)
+    {
+        _filePath = path;
+    }
+
+    // Метод для начала нового логического блока
+    public IDisposable BeginScope<TState>(TState state)
+    {
+        return this;
+    }
+
+    // Метод для очистки ресурсов 
+    public void Dispose() { }
+
+    // Метод для проверки, включено ли логирование для указанного уровня
+    public bool IsEnabled(LogLevel logLevel)
+    {
+        // Здесь можно добавить вашу проверку для включения/выключения логирования на основе уровня
+        // В данной реализации всегда включено
+        return true;
+    }
+
+    // Метод для записи сообщения логирования в файл
+    public void Log<TState>(LogLevel logLevel, EventId eventId,
+                TState state, Exception? exception, Func<TState, Exception?, string> formatter)
+    {
+        // Проверка вычислений перед логированием
+        if (!IsValidCalculation(state))
+            return;
+
+        // Блокируем доступ к файлу для многопоточной безопасности
+        lock (_lock)
+        {
+            // Добавляем текст сообщения логирования в конец файла
+            File.AppendAllText(_filePath, formatter(state, exception) + Environment.NewLine);
+        }
+    }
+
+    // Метод для проверки вычислений перед логированием
+    private bool IsValidCalculation<TState>(TState state)
+    {
+        // Здесь можно добавить вашу логику проверки вычислений перед логированием
+        // В данной реализации всегда считаем вычисления допустимыми
+        return true;
+    }
+}
+
+// Провайдер логгера для записи логов в файл
+public class CustomFileLoggerProvider : ILoggerProvider
+{
+    private readonly string _path; // Путь к файлу логов
+
+    // Конструктор, принимающий путь к файлу логов
+    public CustomFileLoggerProvider(string path)
+    {
+        _path = path;
+    }
+
+    // Метод для создания экземпляра логгера
+    public ILogger CreateLogger(string categoryName)
+    {
+        return new CustomFileLogger(_path); // Создаем новый экземпляр логгера с указанным путем к файлу
+    }
+
+    // Метод для очистки ресурсов 
+    public void Dispose() { }
+}
+
+// Класс-расширение для добавления провайдера логгера в конвейер логирования
+public static class CustomFileLoggerExtensions
+{
+    // Метод для добавления провайдера логгера в конвейер логирования
+    public static ILoggingBuilder AddCustomFileLogger(this ILoggingBuilder builder, string filePath)
+    {
+        builder.AddProvider(new CustomFileLoggerProvider(filePath)); // Добавляем провайдер логгера в конвейер
+        return builder;
+    }
+}
